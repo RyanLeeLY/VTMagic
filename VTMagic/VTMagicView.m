@@ -632,13 +632,22 @@ static VTPanRecognizerDirection direction = VTPanRecognizerDirectionUndefined;
     
     UIButton *menuItem = [_dataSource magicView:self menuItemAtIndex:itemIndex];
     [menuItem setTitle:_menuTitles[itemIndex] forState:UIControlStateNormal];
+    
+    VTColor menuItemTitleNormalVTColor = [[menuItem titleColorForState:UIControlStateNormal] vtm_changeToVTColor];
+    VTColor menuItemTitleSelectedVTColor = [[menuItem titleColorForState:UIControlStateSelected] vtm_changeToVTColor];
     if (VTColorIsZero(_normalVTColor)) {
-        _normalColor = [menuItem titleColorForState:UIControlStateNormal];
+        _normalColor = [UIColor vtm_colorWithVTColor:menuItemTitleNormalVTColor];
         _normalVTColor = [_normalColor vtm_changeToVTColor];
     }
     if (VTColorIsZero(_selectedVTColor)) {
-        _selectedColor = [menuItem titleColorForState:UIControlStateSelected];
+        _selectedColor = [UIColor vtm_colorWithVTColor:menuItemTitleSelectedVTColor];
         _selectedVTColor = [_selectedColor vtm_changeToVTColor];
+    }
+    if (!VTColorIsEqual([_normalColor vtm_changeToVTColor], menuItemTitleNormalVTColor)) {
+        _normalColor = [UIColor vtm_colorWithVTColor:menuItemTitleNormalVTColor];
+    }
+    if (!VTColorIsEqual([_selectedColor vtm_changeToVTColor], menuItemTitleSelectedVTColor)) {
+        _selectedColor = [UIColor vtm_colorWithVTColor:menuItemTitleSelectedVTColor];
     }
     return menuItem;
 }
